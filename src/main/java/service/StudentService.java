@@ -42,4 +42,34 @@ public class StudentService {
         }
         return null;
     }
+
+    public StudentDto getStudentById(int id) {
+        StudentEntity studentEntity = StudentRepo.getById(id, FactoryConfiguration.getInstance().getSession());
+        if(studentEntity != null) {
+            return new StudentDto(studentEntity.getId(), studentEntity.getName(), studentEntity.getAddress(), studentEntity.getContact());
+        }
+        return null;
+    }
+
+    public StudentDto updateStudent(StudentDto student) {
+        StudentEntity studentEntity = StudentRepo.getById(student.getId(), FactoryConfiguration.getInstance().getSession());
+        if(studentEntity != null) {
+            studentEntity.setAddress(student.getAddress());
+            studentEntity.setContact(student.getContact());
+            studentEntity.setName(student.getName());
+            StudentEntity updatedStudent =repo.save(studentEntity, FactoryConfiguration.getInstance().getSession());
+            return new StudentDto(updatedStudent.getId(), updatedStudent.getName(), updatedStudent.getAddress(), updatedStudent.getContact());
+        }
+        return null;
+    }
+
+    public StudentDto deleteStudent(int id) {
+        StudentEntity studentEntity = StudentRepo.getById(id, FactoryConfiguration.getInstance().getSession());
+        if(studentEntity != null) {
+            repo.delete(studentEntity, FactoryConfiguration.getInstance().getSession());
+            return new StudentDto(studentEntity.getId(), studentEntity.getName(), studentEntity.getAddress(), studentEntity.getContact());
+        }
+        return null;
+    }
+
 }
